@@ -53,7 +53,8 @@ function M.generate()
     if success then
       print('Intl classes were generated')
     else
-      print('Intl classes generating failed')
+      vim.api.nvim_err_writeln("Intl classes generating failed")
+      print('')
     end
   end)
 end
