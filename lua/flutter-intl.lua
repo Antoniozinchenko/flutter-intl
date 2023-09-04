@@ -26,26 +26,25 @@ end
 
 -- Function to extract project_id from pubspec.yaml
 local function extract_project_id(pubspec_content)
-  local project_id = vim.fn.systemlist("grep '^\\s*project_id:' " .. pubspec_content)[1]
-  if project_id == nil then
-    vim.api.nvim_err_writeln("Localizely project_id not found in pubspec.yaml")
-    return nil
-  end
-
-  local result = vim.fn.split(project_id, ": ")[2]
-  return result
-
-  -- -- code for finding project_id by yaml library
-  -- local yaml = require('yaml')
-  -- local parsed_yaml = yaml.load(pubspec_content)
-
-  -- if parsed_yaml and parsed_yaml.flutter_intl and parsed_yaml.flutter_intl.localizely then
-  --   local project_id = parsed_yaml.flutter_intl.localizely.project_id
-  --   return project_id
-  -- else
-  --   vim.api.nvim_err_writeln("Localizely project_id is missing inside pubspec.yaml")
+  -- local project_id = vim.fn.systemlist("grep '^\\s*project_id:' " .. pubspec_content)[1]
+  -- if project_id == nil then
+  --   vim.api.nvim_err_writeln("Localizely project_id not found in pubspec.yaml")
   --   return nil
   -- end
+  -- local result = vim.fn.split(project_id, ": ")[2]
+  -- return result
+
+  -- code for finding project_id by yaml library
+  local yaml = require('yaml')
+  local parsed_yaml = yaml.load(pubspec_content)
+
+  if parsed_yaml and parsed_yaml.flutter_intl and parsed_yaml.flutter_intl.localizely then
+    local project_id = parsed_yaml.flutter_intl.localizely.project_id
+    return project_id
+  else
+    vim.api.nvim_err_writeln("Localizely project_id is missing inside pubspec.yaml")
+    return nil
+  end
 end
 
 function M.generate()
