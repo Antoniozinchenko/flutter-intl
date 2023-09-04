@@ -2,7 +2,7 @@ local M = {}
 
 local function run_shell_script(command, callback)
   local job_id = vim.fn.jobstart(command, {
-    on_exit = function(job_id, exit_code)
+    on_exit = function(_, exit_code)
       if exit_code == 0 then
         callback(true)
       else
@@ -25,18 +25,12 @@ local function extract_localizely_token()
 end
 
 -- Function to extract project_id from pubspec.yaml
-local function extract_project_id(pubspec_content)
-  -- local project_id = vim.fn.systemlist("grep '^\\s*project_id:' " .. pubspec_content)[1]
-  -- if project_id == nil then
-  --   vim.api.nvim_err_writeln("Localizely project_id not found in pubspec.yaml")
-  --   return nil
-  -- end
-  -- local result = vim.fn.split(project_id, ": ")[2]
-  -- return result
+local function extract_project_id()
+  local pubspec_path = vim.fn.getcwd() .. "/pubspec.yaml"
 
   -- code for finding project_id by yaml library
   local yaml = require('yaml')
-  local parsed_yaml = yaml.load(pubspec_content)
+  local parsed_yaml = yaml.load(pubspec_path)
 
   if parsed_yaml and parsed_yaml.flutter_intl and parsed_yaml.flutter_intl.localizely then
     local project_id = parsed_yaml.flutter_intl.localizely.project_id
@@ -53,14 +47,12 @@ function M.generate()
       print('Intl classes were generated')
     else
       vim.api.nvim_err_writeln("Intl classes generating failed")
-      print('')
     end
   end)
 end
 
 function M.download_arb()
-  local pubspec = vim.fn.getcwd() .. "/pubspec.yaml"
-  local project_id = extract_project_id(pubspec)
+  local project_id = extract_project_id()
   local localizely_token = extract_localizely_token()
   if project_id == nil or localizely_token == nil then
     return nil
@@ -77,8 +69,7 @@ function M.download_arb()
 end
 
 function M.upload_arb()
-  local pubspec = vim.fn.getcwd() .. "/pubspec.yaml"
-  local project_id = extract_project_id(pubspec)
+  local project_id = extract_project_id()
   local localizely_token = extract_localizely_token()
   if project_id == nil or localizely_token == nil then
     return nil
