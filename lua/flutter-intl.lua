@@ -25,12 +25,6 @@ local function extract_localizely_token()
 end
 
 -- Function to extract project_id from pubspec.yaml
-<<<<<<< Updated upstream
-local function extract_project_id(pubspec_content)
-  local project_id = vim.fn.systemlist("grep '^\\s*project_id:' " .. pubspec_content)[1]
-  if project_id == nil then
-    vim.api.nvim_err_writeln("Localizely project_id not found in pubspec.yaml")
-=======
 local function extract_project_id()
   local pubspec_path = vim.fn.getcwd() .. "/pubspec.yaml"
 
@@ -43,7 +37,6 @@ local function extract_project_id()
     return project_id
   else
     vim.api.nvim_err_writeln("Localizely project_id is missing inside pubspec.yaml")
->>>>>>> Stashed changes
     return nil
   end
 
