@@ -40,20 +40,6 @@ local function extract_project_id()
     return nil
   end
 
-  local result = vim.fn.split(project_id, ": ")[2]
-  return result
-
-  -- code for finding project_id by yaml library
-  local yaml = require('yaml')
-  local parsed_yaml = yaml.load(pubspec_path)
-
-  if parsed_yaml and parsed_yaml.flutter_intl and parsed_yaml.flutter_intl.localizely then
-    local project_id = parsed_yaml.flutter_intl.localizely.project_id
-    return project_id
-  else
-    vim.api.nvim_err_writeln("Localizely project_id is missing inside pubspec.yaml")
-    return nil
-  end
 end
 
 function M.generate()
